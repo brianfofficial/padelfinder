@@ -3,6 +3,7 @@ import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SITE_NAME, SITE_DESCRIPTION, BASE_URL } from "@/lib/utils/constants";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { validateEnv } from "@/lib/utils/env";
 import "./globals.css";
 
@@ -50,6 +51,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jakarta.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
+        <GoogleAnalytics />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
