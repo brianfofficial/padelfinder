@@ -22,7 +22,7 @@ import RatingStars from "@/components/facility/RatingStars";
 import AmenityGrid from "@/components/facility/AmenityGrid";
 import HoursTable from "@/components/facility/HoursTable";
 import NearbyFacilities from "@/components/facility/NearbyFacilities";
-import { MapView } from "@/components/map/MapView";
+import MapViewLazy from "@/components/map/MapViewLazy";
 import ShareButton from "@/components/facility/ShareButton";
 import StatsBar from "@/components/ui/StatsBar";
 import Badge from "@/components/ui/Badge";
@@ -193,7 +193,7 @@ export default async function FacilityDetailPage({ params }: PageProps) {
               <h2 className="mb-3 text-xl font-bold text-gray-900">
                 Location
               </h2>
-              <MapView
+              <MapViewLazy
                 facilities={[facility]}
                 center={{ lat: facility.latitude, lng: facility.longitude }}
                 zoom={14}

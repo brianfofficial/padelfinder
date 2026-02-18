@@ -8,7 +8,6 @@ export function validateEnv() {
   const recommended = [
     ["NEXT_PUBLIC_SUPABASE_URL", "Database connection"],
     ["NEXT_PUBLIC_SUPABASE_ANON_KEY", "Database auth"],
-    ["NEXT_PUBLIC_MAPBOX_TOKEN", "Map display"],
     ["NEXT_PUBLIC_SITE_URL", "Canonical URLs"],
   ] as const;
 
