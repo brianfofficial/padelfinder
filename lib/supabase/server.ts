@@ -1,5 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { createClient as createBareClient, type SupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import type { Database } from "@/lib/types/database";
 
@@ -89,5 +89,20 @@ export async function createServiceClient() {
         },
       },
     }
+  );
+}
+
+/**
+ * Cookie-free client for use in generateStaticParams and other
+ * build-time / static-generation contexts where cookies() is unavailable.
+ */
+export function createStaticClient(): SupabaseClient<Database> {
+  if (!isSupabaseConfigured()) {
+    return createMockClient();
+  }
+
+  return createBareClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 }

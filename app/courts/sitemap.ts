@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { createStaticClient } from "@/lib/supabase/server";
 import { BASE_URL } from "@/lib/utils/constants";
 
 export async function generateSitemaps() {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { count } = await supabase
     .from("facilities")
     .select("*", { count: "exact", head: true })
@@ -21,7 +21,7 @@ export default async function sitemap({
 }: {
   id: number;
 }): Promise<MetadataRoute.Sitemap> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const perSitemap = 5000;
   const start = id * perSitemap;
 

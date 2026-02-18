@@ -92,7 +92,7 @@ export async function autocomplete(
         name: f.name,
         slug: f.slug,
         subtitle: `${f.city}, ${f.state_abbr}`,
-        url: `/courts/${f.state_slug}/${f.city_slug}/${f.slug}`,
+        url: `/courts/${f.slug}`,
       });
     }
   }
@@ -105,7 +105,7 @@ export async function autocomplete(
         name: c.name,
         slug: c.slug,
         subtitle: c.state_name,
-        url: `/courts/${c.state_slug}/${c.slug}`,
+        url: `/states/${c.state_slug}/${c.slug}`,
       });
     }
   }
@@ -118,7 +118,7 @@ export async function autocomplete(
         name: s.name,
         slug: s.slug,
         subtitle: null,
-        url: `/courts/${s.slug}`,
+        url: `/states/${s.slug}`,
       });
     }
   }

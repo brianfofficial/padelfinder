@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { createClient, createStaticClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { ITEMS_PER_PAGE } from "@/lib/utils/constants";
 import type { Facility } from "@/lib/types/facility";
 import { DEMO_FACILITIES, DEMO_FACILITY_COUNT } from "@/lib/demo-data";
@@ -190,7 +190,7 @@ export async function getNearbyFacilities(
 
 export async function getAllFacilitySlugs() {
   if (!isSupabaseConfigured()) return DEMO_FACILITIES.map((f) => ({ slug: f.slug }));
-  const supabase = await createClient();
+  const supabase = createStaticClient();
 
   const { data, error } = await supabase
     .from("facilities")

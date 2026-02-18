@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { createClient, createStaticClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import type { City } from "@/lib/types/facility";
 import { DEMO_CITIES } from "@/lib/demo-data";
 
@@ -58,7 +58,7 @@ export async function getCitiesWithFacilities() {
 
 export async function getAllCitySlugs() {
   if (!isSupabaseConfigured()) return DEMO_CITIES.map((c) => ({ citySlug: c.slug, stateSlug: c.state_slug }));
-  const supabase = await createClient();
+  const supabase = createStaticClient();
 
   const { data, error } = await supabase
     .from("cities")
