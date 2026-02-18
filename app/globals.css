@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* Navy brand palette */
+  --color-navy-50: #f0f4ff;
+  --color-navy-100: #dbe4ff;
+  --color-navy-200: #bac8ff;
+  --color-navy-300: #91a7ff;
+  --color-navy-400: #748ffc;
+  --color-navy-500: #5c7cfa;
+  --color-navy-600: #4c6ef5;
+  --color-navy-700: #4263eb;
+  --color-navy-800: #3b5bdb;
+  --color-navy-900: #364fc7;
+  --color-navy-950: #1e2a5e;
+
+  /* Padel green accent */
+  --color-padel-50: #e6fcf5;
+  --color-padel-100: #c3fae8;
+  --color-padel-200: #96f2d7;
+  --color-padel-300: #63e6be;
+  --color-padel-400: #38d9a9;
+  --color-padel-500: #20c997;
+  --color-padel-600: #12b886;
+  --color-padel-700: #0ca678;
+  --color-padel-800: #099268;
+  --color-padel-900: #087f5b;
+  --color-padel-950: #064e3b;
+
+  /* Amber accent for ratings */
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+}
+
+@layer base {
+  body {
+    @apply antialiased text-gray-900 bg-white;
+  }
+}

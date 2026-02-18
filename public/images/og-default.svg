@@ -1,0 +1,65 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0c1b3a"/>
+      <stop offset="100%" stop-color="#1a2d5a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- Grid pattern -->
+  <g opacity="0.06">
+    <line x1="0" y1="0" x2="0" y2="630" stroke="white" stroke-width="1" />
+    <line x1="60" y1="0" x2="60" y2="630" stroke="white" stroke-width="1" />
+    <line x1="120" y1="0" x2="120" y2="630" stroke="white" stroke-width="1" />
+    <line x1="180" y1="0" x2="180" y2="630" stroke="white" stroke-width="1" />
+    <line x1="240" y1="0" x2="240" y2="630" stroke="white" stroke-width="1" />
+    <line x1="300" y1="0" x2="300" y2="630" stroke="white" stroke-width="1" />
+    <line x1="360" y1="0" x2="360" y2="630" stroke="white" stroke-width="1" />
+    <line x1="420" y1="0" x2="420" y2="630" stroke="white" stroke-width="1" />
+    <line x1="480" y1="0" x2="480" y2="630" stroke="white" stroke-width="1" />
+    <line x1="540" y1="0" x2="540" y2="630" stroke="white" stroke-width="1" />
+    <line x1="600" y1="0" x2="600" y2="630" stroke="white" stroke-width="1" />
+    <line x1="660" y1="0" x2="660" y2="630" stroke="white" stroke-width="1" />
+    <line x1="720" y1="0" x2="720" y2="630" stroke="white" stroke-width="1" />
+    <line x1="780" y1="0" x2="780" y2="630" stroke="white" stroke-width="1" />
+    <line x1="840" y1="0" x2="840" y2="630" stroke="white" stroke-width="1" />
+    <line x1="900" y1="0" x2="900" y2="630" stroke="white" stroke-width="1" />
+    <line x1="960" y1="0" x2="960" y2="630" stroke="white" stroke-width="1" />
+    <line x1="1020" y1="0" x2="1020" y2="630" stroke="white" stroke-width="1" />
+    <line x1="1080" y1="0" x2="1080" y2="630" stroke="white" stroke-width="1" />
+    <line x1="1140" y1="0" x2="1140" y2="630" stroke="white" stroke-width="1" />
+    <line x1="1200" y1="0" x2="1200" y2="630" stroke="white" stroke-width="1" />
+    <line x1="0" y1="0" x2="1200" y2="0" stroke="white" stroke-width="1" />
+    <line x1="0" y1="63" x2="1200" y2="63" stroke="white" stroke-width="1" />
+    <line x1="0" y1="126" x2="1200" y2="126" stroke="white" stroke-width="1" />
+    <line x1="0" y1="189" x2="1200" y2="189" stroke="white" stroke-width="1" />
+    <line x1="0" y1="252" x2="1200" y2="252" stroke="white" stroke-width="1" />
+    <line x1="0" y1="315" x2="1200" y2="315" stroke="white" stroke-width="1" />
+    <line x1="0" y1="378" x2="1200" y2="378" stroke="white" stroke-width="1" />
+    <line x1="0" y1="441" x2="1200" y2="441" stroke="white" stroke-width="1" />
+    <line x1="0" y1="504" x2="1200" y2="504" stroke="white" stroke-width="1" />
+    <line x1="0" y1="567" x2="1200" y2="567" stroke="white" stroke-width="1" />
+    <line x1="0" y1="630" x2="1200" y2="630" stroke="white" stroke-width="1" />
+  </g>
+  <!-- Map pin icon -->
+  <g transform="translate(520, 150)">
+    <path d="M80 0C49.1 0 24 25.1 24 56c0 42 56 94 56 94s56-52 56-94C136 25.1 110.9 0 80 0zm0 76c-11 0-20-9-20-20s9-20 20-20 20 9 20 20-9 20-20 20z" fill="#22c55e" opacity="0.9"/>
+  </g>
+  <!-- Brand text -->
+  <text x="600" y="370" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="800" fill="white">
+    Padel<tspan fill="#22c55e">Finder</tspan>
+  </text>
+  <!-- Tagline -->
+  <text x="600" y="430" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#94a3b8">
+    Find Padel Courts Near You
+  </text>
+  <!-- Stats line -->
+  <text x="600" y="510" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#64748b">
+    The most comprehensive US padel court directory
+  </text>
+</svg>
