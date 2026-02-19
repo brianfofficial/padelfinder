@@ -50,6 +50,10 @@ export interface Facility {
   // Ratings (materialized)
   avg_rating: number;
   review_count: number;
+  // Google Places enrichment
+  google_place_id: string | null;
+  google_rating: number | null;
+  google_review_count: number;
   // SEO
   meta_title: string | null;
   meta_description: string | null;

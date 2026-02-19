@@ -137,6 +137,18 @@ export default async function FacilityDetailPage({ params }: PageProps) {
                 </div>
               )}
 
+              {facility.google_rating && (
+                <div className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-white border border-gray-200 px-3 py-1.5 text-sm shadow-sm">
+                  <span className="font-semibold text-gray-900">
+                    {Number(facility.google_rating).toFixed(1)}
+                  </span>
+                  <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
+                  <span className="text-gray-500">
+                    ({facility.google_review_count} on Google)
+                  </span>
+                </div>
+              )}
+
               {/* Address */}
               <div className="mt-3 flex items-start gap-2 text-gray-600">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />

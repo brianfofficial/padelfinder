@@ -99,6 +99,9 @@ export interface Database {
           images: string[];
           avg_rating: number;
           review_count: number;
+          google_place_id: string | null;
+          google_rating: number | null;
+          google_review_count: number;
           meta_title: string | null;
           meta_description: string | null;
           status: string;
@@ -107,7 +110,7 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database["public"]["Tables"]["facilities"]["Row"], "id" | "created_at" | "updated_at" | "avg_rating" | "review_count" | "location" | "search_vector">;
+        Insert: Omit<Database["public"]["Tables"]["facilities"]["Row"], "id" | "created_at" | "updated_at" | "avg_rating" | "review_count" | "google_review_count" | "location" | "search_vector">;
         Update: Partial<Database["public"]["Tables"]["facilities"]["Insert"]>;
         Relationships: [];
       };
