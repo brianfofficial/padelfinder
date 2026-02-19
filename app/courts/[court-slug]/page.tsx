@@ -144,7 +144,9 @@ export default async function FacilityDetailPage({ params }: PageProps) {
                   </span>
                   <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
                   <span className="text-gray-500">
-                    ({facility.google_review_count} on Google)
+                    {facility.google_review_count > 0
+                      ? `(${facility.google_review_count} on Google)`
+                      : "on Google"}
                   </span>
                 </div>
               )}
