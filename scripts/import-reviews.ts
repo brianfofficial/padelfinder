@@ -95,25 +95,22 @@ async function main() {
       const publishedAt = parseDate(review.publishedAt);
       const ownerResponseDate = parseDate(review.ownerResponseDate ?? "");
 
-      const { error } = await supabase.from("reviews").upsert(
-        {
-          facility_id: facility.id,
-          rating: review.rating,
-          author_name: review.author || "Google User",
-          comment: null,
-          skill_level: null,
-          status: "approved",
-          source: "google",
-          source_review_id: review.reviewId,
-          text: review.text || null,
-          published_at: publishedAt,
-          owner_response: review.ownerResponse,
-          owner_response_date: ownerResponseDate,
-          language: "en",
-          helpful_count: review.helpfulCount || 0,
-        },
-        { onConflict: "source,source_review_id", ignoreDuplicates: true },
-      );
+      const { error } = await supabase.from("reviews").insert({
+        facility_id: facility.id,
+        rating: review.rating,
+        author_name: review.author || "Google User",
+        comment: null,
+        skill_level: null,
+        status: "approved",
+        source: "google",
+        source_review_id: review.reviewId,
+        text: review.text || null,
+        published_at: publishedAt,
+        owner_response: review.ownerResponse,
+        owner_response_date: ownerResponseDate,
+        language: "en",
+        helpful_count: review.helpfulCount || 0,
+      });
 
       if (error) {
         // Likely duplicate — not a real error
