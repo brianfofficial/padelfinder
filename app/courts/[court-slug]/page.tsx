@@ -10,9 +10,7 @@ import {
   Clock,
   DollarSign,
   Star,
-  User,
   Navigation,
-  Share2,
   Flag,
   ShieldCheck,
 } from "lucide-react";
@@ -23,6 +21,7 @@ import AmenityGrid from "@/components/facility/AmenityGrid";
 import HoursTable from "@/components/facility/HoursTable";
 import NearbyFacilities from "@/components/facility/NearbyFacilities";
 import MapViewLazy from "@/components/map/MapViewLazy";
+import ReviewsSection from "@/components/facility/ReviewsSection";
 import ShareButton from "@/components/facility/ShareButton";
 import StatsBar from "@/components/ui/StatsBar";
 import Badge from "@/components/ui/Badge";
@@ -32,7 +31,7 @@ import {
   getAllFacilitySlugs,
   getNearbyFacilities,
 } from "@/lib/queries/facilities";
-import { getReviewsByFacility } from "@/lib/queries/reviews";
+import { getReviewsByFacility, getReviewStats } from "@/lib/queries/reviews";
 import { facilityMetadata } from "@/lib/seo/metadata";
 import {
   facilitySchema,
@@ -66,8 +65,9 @@ export default async function FacilityDetailPage({ params }: PageProps) {
   const facility = await getFacilityBySlug(courtSlug);
   if (!facility) notFound();
 
-  const [reviews, nearbyFacilities] = await Promise.all([
+  const [reviews, reviewStats, nearbyFacilities] = await Promise.all([
     getReviewsByFacility(facility.id),
+    getReviewStats(facility.id),
     getNearbyFacilities(facility.latitude, facility.longitude, 25, 4),
   ]);
 
@@ -93,7 +93,7 @@ export default async function FacilityDetailPage({ params }: PageProps) {
   return (
     <>
       <JsonLd
-        data={facilitySchema(facility) as unknown as Record<string, unknown>}
+        data={facilitySchema(facility, reviews) as unknown as Record<string, unknown>}
       />
       <JsonLd
         data={
@@ -228,67 +228,12 @@ export default async function FacilityDetailPage({ params }: PageProps) {
             </section>
 
             {/* Reviews */}
-            <section>
-              <h2 className="mb-4 text-xl font-bold text-gray-900">
-                Reviews{" "}
-                {reviews.length > 0 && (
-                  <span className="text-base font-normal text-gray-500">
-                    ({reviews.length})
-                  </span>
-                )}
-              </h2>
-              {reviews.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-6 py-10 text-center">
-                  <Star className="mx-auto mb-2 h-8 w-8 text-gray-300" />
-                  <p className="text-sm text-gray-500">
-                    No reviews yet. Be the first to leave a review!
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {reviews.map((review) => (
-                    <div
-                      key={review.id}
-                      className="rounded-xl border border-gray-200 bg-white p-5"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-100 text-navy-700">
-                            <User className="h-4 w-4" />
-                          </div>
-                          <div>
-                            <p className="text-sm font-semibold text-gray-900">
-                              {review.author_name}
-                            </p>
-                            {review.skill_level && (
-                              <p className="text-xs text-gray-500 capitalize">
-                                {review.skill_level} player
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        <RatingStars rating={review.rating} size="sm" />
-                      </div>
-                      {review.comment && (
-                        <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-                          {review.comment}
-                        </p>
-                      )}
-                      <p className="mt-2 text-xs text-gray-400">
-                        {new Date(review.created_at).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          },
-                        )}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </section>
+            <ReviewsSection
+              reviews={reviews}
+              stats={reviewStats}
+              googlePlaceId={facility.google_place_id}
+              facilityName={facility.name}
+            />
           </div>
 
           {/* Sidebar */}

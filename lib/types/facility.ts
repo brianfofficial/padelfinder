@@ -54,6 +54,13 @@ export interface Facility {
   google_place_id: string | null;
   google_rating: number | null;
   google_review_count: number;
+  // Verification
+  verified_at: string | null;
+  verification_status: "unverified" | "verified" | "claimed";
+  website_live: boolean | null;
+  data_source: string;
+  google_cid: string | null;
+  rating_distribution: Record<string, number> | null;
   // SEO
   meta_title: string | null;
   meta_description: string | null;
@@ -123,6 +130,15 @@ export interface Review {
   comment: string | null;
   skill_level: "beginner" | "intermediate" | "advanced" | null;
   status: "pending" | "approved" | "rejected";
+  // Google import fields
+  source: "user" | "google";
+  source_review_id: string | null;
+  text: string | null;
+  published_at: string | null;
+  owner_response: string | null;
+  owner_response_date: string | null;
+  language: string;
+  helpful_count: number;
   created_at: string;
 }
 

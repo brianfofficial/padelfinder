@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# scraper data & binaries
+scripts/data/*.csv
+scripts/data/*.json
+scripts/data/google-maps-scraper

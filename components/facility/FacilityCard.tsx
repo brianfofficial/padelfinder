@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin } from "lucide-react";
+import { MapPin, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import type { Facility } from "@/lib/types/facility";
 import { getActiveAmenities } from "@/lib/types/facility";
@@ -89,6 +89,9 @@ export default function FacilityCard({
           )}
         >
           {facility.name}
+          {facility.verification_status === "verified" && (
+            <CheckCircle className="ml-1 inline h-4 w-4 text-padel-600" />
+          )}
         </h3>
 
         <div className="mt-1 flex items-center gap-1 text-sm text-gray-500">

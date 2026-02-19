@@ -1,7 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import type { Review } from "@/lib/types/facility";
 
-export async function getReviewsByFacility(facilityId: string) {
+export type ReviewSort = "relevant" | "newest" | "highest" | "lowest";
+
+export async function getReviewsByFacility(
+  facilityId: string,
+  sort: ReviewSort = "relevant",
+) {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -15,7 +20,25 @@ export async function getReviewsByFacility(facilityId: string) {
     return [];
   }
 
-  return (data ?? []) as Review[];
+  const reviews = (data ?? []) as Review[];
+
+  // Client-side sort since we need multi-column ordering
+  switch (sort) {
+    case "relevant":
+      return reviews.sort(
+        (a, b) => b.helpful_count - a.helpful_count || new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      );
+    case "newest":
+      return reviews.sort(
+        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      );
+    case "highest":
+      return reviews.sort((a, b) => b.rating - a.rating);
+    case "lowest":
+      return reviews.sort((a, b) => a.rating - b.rating);
+    default:
+      return reviews;
+  }
 }
 
 export interface ReviewStats {

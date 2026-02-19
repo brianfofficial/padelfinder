@@ -102,6 +102,12 @@ export interface Database {
           google_place_id: string | null;
           google_rating: number | null;
           google_review_count: number;
+          verified_at: string | null;
+          verification_status: string;
+          website_live: boolean | null;
+          data_source: string;
+          google_cid: string | null;
+          rating_distribution: Record<string, number> | null;
           meta_title: string | null;
           meta_description: string | null;
           status: string;
@@ -110,7 +116,7 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database["public"]["Tables"]["facilities"]["Row"], "id" | "created_at" | "updated_at" | "avg_rating" | "review_count" | "google_review_count" | "location" | "search_vector">;
+        Insert: Omit<Database["public"]["Tables"]["facilities"]["Row"], "id" | "created_at" | "updated_at" | "avg_rating" | "review_count" | "google_review_count" | "location" | "search_vector" | "verification_status" | "data_source">;
         Update: Partial<Database["public"]["Tables"]["facilities"]["Insert"]>;
         Relationships: [];
       };
@@ -123,10 +129,18 @@ export interface Database {
           comment: string | null;
           skill_level: string | null;
           status: string;
+          source: string;
+          source_review_id: string | null;
+          text: string | null;
+          published_at: string | null;
+          owner_response: string | null;
+          owner_response_date: string | null;
+          language: string;
+          helpful_count: number;
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database["public"]["Tables"]["reviews"]["Row"], "id" | "created_at" | "updated_at" | "status">;
+        Insert: Omit<Database["public"]["Tables"]["reviews"]["Row"], "id" | "created_at" | "updated_at" | "status" | "source" | "language" | "helpful_count">;
         Update: Partial<Database["public"]["Tables"]["reviews"]["Insert"]>;
         Relationships: [
           {

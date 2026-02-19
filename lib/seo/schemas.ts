@@ -8,7 +8,7 @@ import type {
   BreadcrumbList,
 } from "schema-dts";
 import { BASE_URL, SITE_NAME } from "@/lib/utils/constants";
-import type { Facility, WeeklyHours, DayHours } from "@/lib/types/facility";
+import type { Facility, Review, WeeklyHours, DayHours } from "@/lib/types/facility";
 
 export function websiteSchema(): WithContext<WebSite> {
   return {
@@ -72,7 +72,8 @@ function buildOpeningHours(hours: WeeklyHours) {
 }
 
 export function facilitySchema(
-  facility: Facility
+  facility: Facility,
+  reviews?: Review[],
 ): WithContext<SportsActivityLocation> {
   const url = `${BASE_URL}/courts/${facility.state_slug}/${facility.city_slug}/${facility.slug}`;
 
@@ -101,15 +102,38 @@ export function facilitySchema(
     image: facility.images.length > 0 ? facility.images : undefined,
   };
 
-  // Add aggregate rating if reviews exist
-  if (facility.review_count > 0) {
+  // Add aggregate rating — prefer Google rating when available
+  const ratingValue = facility.google_rating ?? facility.avg_rating;
+  const reviewCount = facility.google_review_count || facility.review_count;
+  if (reviewCount > 0) {
     schema.aggregateRating = {
       "@type": "AggregateRating",
-      ratingValue: facility.avg_rating,
-      reviewCount: facility.review_count,
+      ratingValue,
+      reviewCount,
       bestRating: 5,
       worstRating: 1,
     };
+  }
+
+  // Add individual Review entries (top 5 with text)
+  if (reviews && reviews.length > 0) {
+    const topReviews = reviews
+      .filter((r) => r.text || r.comment)
+      .slice(0, 5);
+    if (topReviews.length > 0) {
+      schema.review = topReviews.map((r) => ({
+        "@type": "Review",
+        author: { "@type": "Person", name: r.author_name },
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: r.rating,
+          bestRating: 5,
+          worstRating: 1,
+        },
+        reviewBody: r.text ?? r.comment,
+        datePublished: r.published_at ?? r.created_at,
+      }));
+    }
   }
 
   // Add opening hours if available
