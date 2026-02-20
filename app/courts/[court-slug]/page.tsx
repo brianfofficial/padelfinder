@@ -283,6 +283,23 @@ export default async function FacilityDetailPage({ params }: PageProps) {
                 ]}
               />
             </section>
+
+            {/* Claim Listing CTA */}
+            <section className="rounded-xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-6 text-center">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Own or manage {facility.name}?
+              </h3>
+              <p className="mt-1 text-sm text-gray-600">
+                Claim this listing to update your info, respond to reviews, and reach more players.
+              </p>
+              <a
+                href={`mailto:brian@padelfinder.com?subject=Claim listing: ${encodeURIComponent(facility.name)}&body=I'd like to claim the listing for ${encodeURIComponent(facility.name)} on PadelFinder.%0A%0AMy name:%0AMy role:%0AFacility website:`}
+                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-padel-600 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-padel-700"
+              >
+                <ShieldCheck className="h-4 w-4" />
+                Claim This Listing
+              </a>
+            </section>
           </div>
 
           {/* Sidebar */}
