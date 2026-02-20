@@ -97,7 +97,7 @@ export async function getFacilitiesByCity(
 
 export async function getFacilitiesByState(
   stateSlug: string,
-  options?: { page?: number; limit?: number }
+  options?: { page?: number; limit?: number; sort?: string; amenities?: string[]; bestFor?: string }
 ) {
   const limit = options?.limit ?? ITEMS_PER_PAGE;
   const page = options?.page ?? 1;
@@ -107,18 +107,44 @@ export async function getFacilitiesByState(
     return { data: matching, count: matching.length, page, totalPages: 1 };
   }
 
+  const sort = options?.sort ?? "rating";
+  const amenities = options?.amenities ?? [];
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
   const supabase = await createClient();
 
-  const { data, count, error } = await supabase
+  let query = supabase
     .from("facilities")
     .select("*", { count: "exact" })
     .eq("state_slug", stateSlug)
-    .eq("status", "active")
-    .order("avg_rating", { ascending: false })
-    .range(from, to);
+    .eq("status", "active");
+
+  for (const amenity of amenities) {
+    query = query.eq(amenity, true);
+  }
+
+  if (options?.bestFor) {
+    query = query.contains("best_for_tags", [options.bestFor]);
+  }
+
+  switch (sort) {
+    case "name":
+      query = query.order("name", { ascending: true });
+      break;
+    case "newest":
+      query = query.order("created_at", { ascending: false });
+      break;
+    case "courts":
+      query = query.order("total_courts", { ascending: false });
+      break;
+    case "rating":
+    default:
+      query = query.order("avg_rating", { ascending: false });
+      break;
+  }
+
+  const { data, count, error } = await query.range(from, to);
 
   if (error) {
     return { data: [], count: 0, page, totalPages: 0 };

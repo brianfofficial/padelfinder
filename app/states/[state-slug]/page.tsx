@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MapPin } from "lucide-react";
 import BreadcrumbNav from "@/components/seo/BreadcrumbNav";
+import { FilterBar } from "@/components/search/FilterBar";
 import FacilityGrid from "@/components/facility/FacilityGrid";
 import FAQSection from "@/components/ui/FAQSection";
 import JsonLd from "@/components/seo/JsonLd";
@@ -18,6 +19,7 @@ export const revalidate = 86400;
 
 interface PageProps {
   params: Promise<{ "state-slug": string }>;
+  searchParams: Promise<{ sort?: string; amenity?: string | string[]; bestFor?: string }>;
 }
 
 export async function generateStaticParams() {
@@ -32,15 +34,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return stateMetadata(state);
 }
 
-export default async function StateDetailPage({ params }: PageProps) {
+export default async function StateDetailPage({ params, searchParams }: PageProps) {
   const { "state-slug": stateSlug } = await params;
+  const sp = await searchParams;
+  const sort = sp.sort;
+  const bestFor = sp.bestFor;
+  const amenityParam = sp.amenity;
+  const amenities = amenityParam
+    ? Array.isArray(amenityParam)
+      ? amenityParam
+      : [amenityParam]
+    : [];
 
   const state = await getStateBySlug(stateSlug);
   if (!state) notFound();
 
   const [cities, facilitiesResult] = await Promise.all([
     getCitiesByState(stateSlug),
-    getFacilitiesByState(stateSlug),
+    getFacilitiesByState(stateSlug, { sort, amenities, bestFor }),
   ]);
 
   const breadcrumbs = [
@@ -123,12 +134,13 @@ export default async function StateDetailPage({ params }: PageProps) {
 
         {/* Facilities */}
         <section className="mt-12">
-          <p className="mb-2 text-sm text-gray-500">
-            Showing {formatNumber(facilitiesResult.data.length)} padel {pluralize(facilitiesResult.data.length, "court")} across {formatNumber(cities.length)} {pluralize(cities.length, "city", "cities")} in {state.name}
-          </p>
-          <h2 className="mb-6 text-2xl font-bold text-gray-900">
+          <h2 className="mb-4 text-2xl font-bold text-gray-900">
             All Courts in {state.name}
           </h2>
+          <FilterBar />
+          <p className="mt-4 mb-2 text-sm text-gray-500">
+            Showing {formatNumber(facilitiesResult.data.length)} padel {pluralize(facilitiesResult.data.length, "court")} across {formatNumber(cities.length)} {pluralize(cities.length, "city", "cities")} in {state.name}
+          </p>
           <FacilityGrid facilities={facilitiesResult.data} />
           <div className="mt-8 rounded-xl border border-dashed border-gray-300 bg-gray-50 px-6 py-8 text-center">
             <p className="text-gray-600 font-medium">
