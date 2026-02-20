@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, CheckCircle } from "lucide-react";
@@ -21,10 +24,11 @@ export default function FacilityCard({
   facility,
   variant = "default",
 }: FacilityCardProps) {
+  const [imgError, setImgError] = useState(false);
   const isFeatured = variant === "featured" || facility.is_featured;
   const isCompact = variant === "compact";
   const amenities = getActiveAmenities(facility).slice(0, 4);
-  const hasImage = facility.images.length > 0;
+  const hasImage = facility.images.length > 0 && !imgError;
 
   return (
     <Link
@@ -51,6 +55,7 @@ export default function FacilityCard({
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             sizes={isCompact ? "128px" : "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"}
+            onError={() => setImgError(true)}
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-navy-100 to-padel-100 flex items-center justify-center">

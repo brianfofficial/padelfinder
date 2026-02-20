@@ -13,21 +13,34 @@ interface PhotoGalleryProps {
 export default function PhotoGallery({ images, name }: PhotoGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
+
+  const handleImageError = useCallback((index: number) => {
+    setFailedImages((prev) => new Set(prev).add(index));
+  }, []);
+
+  // Filter out failed images
+  const validImages = images
+    .map((src, i) => ({ src, originalIndex: i }))
+    .filter(({ originalIndex }) => !failedImages.has(originalIndex));
 
   const goTo = useCallback(
     (index: number) => {
-      setActiveIndex((index + images.length) % images.length);
+      setActiveIndex((index + validImages.length) % validImages.length);
     },
-    [images.length],
+    [validImages.length],
   );
 
-  if (images.length === 0) {
+  if (validImages.length === 0) {
     return (
       <div className="aspect-[16/9] w-full rounded-xl bg-gradient-to-br from-navy-100 to-padel-100 flex items-center justify-center">
         <p className="text-sm text-gray-500">No photos available</p>
       </div>
     );
   }
+
+  // Clamp activeIndex to valid range
+  const safeIndex = activeIndex >= validImages.length ? 0 : activeIndex;
 
   return (
     <>
@@ -39,26 +52,27 @@ export default function PhotoGallery({ images, name }: PhotoGalleryProps) {
           className="relative aspect-[16/9] w-full overflow-hidden rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-navy-500"
         >
           <Image
-            src={images[activeIndex]}
-            alt={`${name} - Photo ${activeIndex + 1}`}
+            src={validImages[safeIndex].src}
+            alt={`${name} - Photo ${safeIndex + 1}`}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 66vw"
             priority
+            onError={() => handleImageError(validImages[safeIndex].originalIndex)}
           />
         </button>
 
         {/* Thumbnails */}
-        {images.length > 1 && (
+        {validImages.length > 1 && (
           <div className="flex gap-2 overflow-x-auto pb-1">
-            {images.map((src, index) => (
+            {validImages.map(({ src, originalIndex }, index) => (
               <button
-                key={index}
+                key={originalIndex}
                 type="button"
                 onClick={() => setActiveIndex(index)}
                 className={cn(
                   "relative h-16 w-20 shrink-0 overflow-hidden rounded-lg transition-all focus:outline-none",
-                  index === activeIndex
+                  index === safeIndex
                     ? "ring-2 ring-navy-500 opacity-100"
                     : "opacity-60 hover:opacity-100",
                 )}
@@ -69,6 +83,7 @@ export default function PhotoGallery({ images, name }: PhotoGalleryProps) {
                   fill
                   className="object-cover"
                   sizes="80px"
+                  onError={() => handleImageError(originalIndex)}
                 />
               </button>
             ))}
@@ -94,10 +109,10 @@ export default function PhotoGallery({ images, name }: PhotoGalleryProps) {
           </button>
 
           {/* Previous button */}
-          {images.length > 1 && (
+          {validImages.length > 1 && (
             <button
               type="button"
-              onClick={() => goTo(activeIndex - 1)}
+              onClick={() => goTo(safeIndex - 1)}
               className="absolute left-4 z-10 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition-colors"
               aria-label="Previous photo"
             >
@@ -108,19 +123,20 @@ export default function PhotoGallery({ images, name }: PhotoGalleryProps) {
           {/* Lightbox image */}
           <div className="relative h-[80vh] w-[90vw] max-w-5xl">
             <Image
-              src={images[activeIndex]}
-              alt={`${name} - Photo ${activeIndex + 1}`}
+              src={validImages[safeIndex].src}
+              alt={`${name} - Photo ${safeIndex + 1}`}
               fill
               className="object-contain"
               sizes="90vw"
+              onError={() => handleImageError(validImages[safeIndex].originalIndex)}
             />
           </div>
 
           {/* Next button */}
-          {images.length > 1 && (
+          {validImages.length > 1 && (
             <button
               type="button"
-              onClick={() => goTo(activeIndex + 1)}
+              onClick={() => goTo(safeIndex + 1)}
               className="absolute right-4 z-10 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition-colors"
               aria-label="Next photo"
             >
@@ -130,7 +146,7 @@ export default function PhotoGallery({ images, name }: PhotoGalleryProps) {
 
           {/* Image counter */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-sm text-white">
-            {activeIndex + 1} / {images.length}
+            {safeIndex + 1} / {validImages.length}
           </div>
         </div>
       )}
