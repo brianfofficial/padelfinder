@@ -13,9 +13,10 @@ const STATE_LINKS = [
 ];
 
 const RESOURCE_LINKS = [
-  { href: "/blog/what-is-padel", label: "What is Padel?" },
-  { href: "/blog/padel-vs-pickleball", label: "Padel vs Pickleball" },
-  { href: "/blog/padel-rules", label: "Padel Rules" },
+  { href: "/guides", label: "Padel Guides" },
+  { href: "/guides/cities", label: "City Guides" },
+  { href: "/guides/how-to-play-padel", label: "How to Play" },
+  { href: "/guides/padel-equipment", label: "Equipment Guide" },
   { href: "/blog", label: "All Articles" },
 ];
 

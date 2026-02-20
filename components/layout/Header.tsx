@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils/cn";
 const NAV_LINKS = [
   { href: "/courts", label: "Find Courts" },
   { href: "/states", label: "Browse by State" },
+  { href: "/guides", label: "Guides" },
   { href: "/blog", label: "Blog" },
   { href: "/submit", label: "Add a Court" },
 ];

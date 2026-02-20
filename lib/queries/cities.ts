@@ -74,6 +74,61 @@ export async function getAllCitySlugs() {
   }));
 }
 
+export async function getCitiesWithGuides() {
+  if (!isSupabaseConfigured()) return [];
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("cities")
+    .select("*")
+    .not("guide_intro", "is", null)
+    .order("facility_count", { ascending: false });
+
+  if (error) {
+    return [];
+  }
+
+  return (data ?? []) as City[];
+}
+
+export async function getCityGuide(citySlug: string, stateSlug: string) {
+  if (!isSupabaseConfigured()) return null;
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("cities")
+    .select("*")
+    .eq("slug", citySlug)
+    .eq("state_slug", stateSlug)
+    .not("guide_intro", "is", null)
+    .single();
+
+  if (error) {
+    return null;
+  }
+
+  return data as City;
+}
+
+export async function getCityGuideSlugs() {
+  if (!isSupabaseConfigured()) return [];
+  const supabase = createStaticClient();
+
+  const { data, error } = await supabase
+    .from("cities")
+    .select("slug, state_slug")
+    .not("guide_intro", "is", null);
+
+  if (error) {
+    return [];
+  }
+
+  return (data ?? []).map((row) => ({
+    citySlug: row.slug,
+    stateSlug: row.state_slug,
+  }));
+}
+
 export async function getFeaturedCities(limit: number = 12) {
   if (!isSupabaseConfigured()) return DEMO_CITIES.slice(0, limit);
   const supabase = await createClient();

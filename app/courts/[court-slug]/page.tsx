@@ -13,6 +13,7 @@ import {
   Navigation,
   Flag,
   ShieldCheck,
+  BookOpen,
 } from "lucide-react";
 import BreadcrumbNav from "@/components/seo/BreadcrumbNav";
 import PhotoGallery from "@/components/facility/PhotoGallery";
@@ -34,6 +35,7 @@ import {
   getNearbyFacilities,
 } from "@/lib/queries/facilities";
 import { getReviewsByFacility, getReviewStats } from "@/lib/queries/reviews";
+import { getCityBySlug } from "@/lib/queries/cities";
 import { facilityMetadata } from "@/lib/seo/metadata";
 import {
   facilitySchema,
@@ -67,10 +69,11 @@ export default async function FacilityDetailPage({ params }: PageProps) {
   const facility = await getFacilityBySlug(courtSlug);
   if (!facility) notFound();
 
-  const [reviews, reviewStats, nearbyFacilities] = await Promise.all([
+  const [reviews, reviewStats, nearbyFacilities, cityData] = await Promise.all([
     getReviewsByFacility(facility.id),
     getReviewStats(facility.id),
     getNearbyFacilities(facility.latitude, facility.longitude, 25, 4),
+    getCityBySlug(facility.city_slug, facility.state_slug),
   ]);
 
   // Filter out the current facility from nearby results
@@ -429,6 +432,22 @@ export default async function FacilityDetailPage({ params }: PageProps) {
                   {facility.surface_type}
                 </p>
               </div>
+            )}
+
+            {/* City Guide Card */}
+            {cityData?.guide_intro && (
+              <Link
+                href={`/guides/cities/${facility.state_slug}/${facility.city_slug}`}
+                className="group block rounded-xl border border-padel-200 bg-padel-50 p-4 transition-colors hover:bg-padel-100"
+              >
+                <div className="flex items-center gap-2 text-sm font-semibold text-padel-700">
+                  <BookOpen className="h-4 w-4" />
+                  {facility.city} Padel Guide
+                </div>
+                <p className="mt-1 text-xs text-gray-600 line-clamp-2">
+                  {cityData.guide_intro}
+                </p>
+              </Link>
             )}
 
             {/* Listing Actions */}

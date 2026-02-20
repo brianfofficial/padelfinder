@@ -125,6 +125,9 @@ export interface City {
   meta_title: string | null;
   meta_description: string | null;
   facility_count: number;
+  guide_intro: string | null;
+  guide_body: string | null;
+  guide_generated_at: string | null;
   created_at: string;
   updated_at: string;
 }

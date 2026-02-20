@@ -1,0 +1,4 @@
+ALTER TABLE cities
+  ADD COLUMN IF NOT EXISTS guide_intro TEXT,
+  ADD COLUMN IF NOT EXISTS guide_body TEXT,
+  ADD COLUMN IF NOT EXISTS guide_generated_at TIMESTAMPTZ;

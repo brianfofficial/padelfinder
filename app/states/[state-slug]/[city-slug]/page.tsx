@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MapPin } from "lucide-react";
+import { MapPin, BookOpen } from "lucide-react";
 import BreadcrumbNav from "@/components/seo/BreadcrumbNav";
 import FacilityGrid from "@/components/facility/FacilityGrid";
 import FAQSection from "@/components/ui/FAQSection";
@@ -116,6 +116,28 @@ export default async function CityDetailPage({ params, searchParams }: PageProps
             {pluralize(city.facility_count, "Facility", "Facilities")}
           </p>
         </section>
+
+        {/* City Guide Banner */}
+        {city.guide_intro && (
+          <section className="mt-6 rounded-xl border border-padel-200 bg-padel-50 px-5 py-4">
+            <Link
+              href={`/guides/cities/${stateSlug}/${citySlug}`}
+              className="flex items-center gap-3 group"
+            >
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-padel-100 text-padel-700 group-hover:bg-padel-600 group-hover:text-white transition-colors">
+                <BookOpen className="h-4 w-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-gray-900 group-hover:text-padel-700 transition-colors">
+                  Read our {city.name} Padel Guide
+                </p>
+                <p className="text-sm text-gray-600 line-clamp-1">
+                  {city.guide_intro}
+                </p>
+              </div>
+            </Link>
+          </section>
+        )}
 
         {/* Filters */}
         <div className="mt-8">

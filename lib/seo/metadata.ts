@@ -166,6 +166,68 @@ export function facilityMetadata(facility: {
   };
 }
 
+export function cityGuideMetadata(city: {
+  name: string;
+  slug: string;
+  state_name: string;
+  state_slug: string;
+  state_abbr: string;
+  facility_count: number;
+}): Metadata {
+  const title = `Best Padel Courts in ${city.name}, ${city.state_abbr} (${new Date().getFullYear()}) | ${SITE_NAME}`;
+  const description = `Discover the ${city.facility_count} best padel ${city.facility_count === 1 ? "court" : "courts"} in ${city.name}, ${city.state_name}. Expert guide with ratings, pricing, tips, and insider info.`;
+  const url = `${BASE_URL}/guides/cities/${city.state_slug}/${city.slug}`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: SITE_NAME,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
+
+export function guideMetadata(guide: {
+  title: string;
+  description: string;
+  slug: string;
+}): Metadata {
+  const title = `${guide.title} | ${SITE_NAME}`;
+  const url = `${BASE_URL}/guides/${guide.slug}`;
+
+  return {
+    title,
+    description: guide.description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title,
+      description: guide.description,
+      url,
+      siteName: SITE_NAME,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: guide.description,
+    },
+  };
+}
+
 export function blogMetadata(post: {
   title: string;
   slug: string;
