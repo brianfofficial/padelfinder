@@ -22,6 +22,15 @@ const QUICK_FILTERS: AmenityKey[] = [
   "tournaments",
 ];
 
+const BEST_FOR_OPTIONS = [
+  "Beginners",
+  "Intermediate Players",
+  "Competitive Players",
+  "Families",
+  "Social Groups",
+  "Fitness Enthusiasts",
+] as const;
+
 export function FilterBar() {
   const router = useRouter();
   const pathname = usePathname();
@@ -29,6 +38,7 @@ export function FilterBar() {
 
   const currentSort = searchParams.get("sort") || "rating";
   const activeAmenities = searchParams.getAll("amenity");
+  const activeBestFor = searchParams.get("bestFor");
 
   const updateParams = useCallback(
     (updates: Record<string, string | string[] | null>) => {
@@ -101,6 +111,28 @@ export function FilterBar() {
             )}
           >
             {AMENITY_CONFIG[amenity].label}
+          </button>
+        ))}
+      </div>
+
+      {/* Best For filters */}
+      <div className="flex flex-wrap items-center gap-1.5">
+        <span className="text-sm text-gray-500">Best for:</span>
+        {BEST_FOR_OPTIONS.map((option) => (
+          <button
+            key={option}
+            type="button"
+            onClick={() =>
+              updateParams({ bestFor: activeBestFor === option ? null : option })
+            }
+            className={cn(
+              "rounded-full border px-3 py-1 text-sm font-medium transition-colors",
+              activeBestFor === option
+                ? "border-padel-600 bg-padel-50 text-padel-700"
+                : "border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+            )}
+          >
+            {option}
           </button>
         ))}
       </div>

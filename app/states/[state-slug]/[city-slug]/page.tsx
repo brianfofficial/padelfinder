@@ -6,6 +6,7 @@ import BreadcrumbNav from "@/components/seo/BreadcrumbNav";
 import FacilityGrid from "@/components/facility/FacilityGrid";
 import FAQSection from "@/components/ui/FAQSection";
 import JsonLd from "@/components/seo/JsonLd";
+import { FilterBar } from "@/components/search/FilterBar";
 import { Pagination } from "@/components/layout/Pagination";
 import { getCityBySlug, getAllCitySlugs, getCitiesByState } from "@/lib/queries/cities";
 import { getStateBySlug } from "@/lib/queries/states";
@@ -19,7 +20,7 @@ export const revalidate = 3600;
 
 interface PageProps {
   params: Promise<{ "state-slug": string; "city-slug": string }>;
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; sort?: string; amenity?: string | string[]; bestFor?: string }>;
 }
 
 export async function generateStaticParams() {
@@ -39,7 +40,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CityDetailPage({ params, searchParams }: PageProps) {
   const { "state-slug": stateSlug, "city-slug": citySlug } = await params;
-  const { page: pageParam } = await searchParams;
+  const sp = await searchParams;
+  const pageParam = sp.page;
+  const sort = sp.sort;
+  const bestFor = sp.bestFor;
+  const amenityParam = sp.amenity;
+  const amenities = amenityParam
+    ? Array.isArray(amenityParam)
+      ? amenityParam
+      : [amenityParam]
+    : [];
 
   const currentPage = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
 
@@ -51,7 +61,7 @@ export default async function CityDetailPage({ params, searchParams }: PageProps
   if (!city || !state) notFound();
 
   const [facilitiesResult, allCitiesInState] = await Promise.all([
-    getFacilitiesByCity(citySlug, stateSlug, { page: currentPage }),
+    getFacilitiesByCity(citySlug, stateSlug, { page: currentPage, sort, amenities, bestFor }),
     getCitiesByState(stateSlug),
   ]);
 
@@ -107,16 +117,9 @@ export default async function CityDetailPage({ params, searchParams }: PageProps
           </p>
         </section>
 
-        {/* Filter placeholder */}
-        <div className="mt-8 flex items-center justify-between">
-          <p className="text-sm text-gray-500">
-            Showing all courts in {city.name}
-          </p>
-          {facilitiesResult.totalPages > 1 && (
-            <p className="text-sm text-gray-500">
-              Page {currentPage} of {facilitiesResult.totalPages}
-            </p>
-          )}
+        {/* Filters */}
+        <div className="mt-8">
+          <FilterBar />
         </div>
 
         {/* Facility Grid */}

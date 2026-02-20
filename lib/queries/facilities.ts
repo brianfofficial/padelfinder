@@ -26,7 +26,7 @@ export async function getFacilityBySlug(slug: string) {
 export async function getFacilitiesByCity(
   citySlug: string,
   stateSlug: string,
-  options?: { page?: number; sort?: string; amenities?: string[] }
+  options?: { page?: number; sort?: string; amenities?: string[]; bestFor?: string }
 ) {
   const page = options?.page ?? 1;
 
@@ -53,6 +53,11 @@ export async function getFacilitiesByCity(
   // Apply amenity filters — each is a boolean column that must be true
   for (const amenity of amenities) {
     query = query.eq(amenity, true);
+  }
+
+  // Apply best-for filter
+  if (options?.bestFor) {
+    query = query.contains("best_for_tags", [options.bestFor]);
   }
 
   // Apply sort

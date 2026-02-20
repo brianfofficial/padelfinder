@@ -61,6 +61,13 @@ export interface Facility {
   data_source: string;
   google_cid: string | null;
   rating_distribution: Record<string, number> | null;
+  // AI review insights
+  review_summary: string | null;
+  review_pros: string[] | null;
+  review_cons: string[] | null;
+  best_for_tags: string[] | null;
+  standout_quote: string | null;
+  owner_response_rate: number | null;
   // SEO
   meta_title: string | null;
   meta_description: string | null;

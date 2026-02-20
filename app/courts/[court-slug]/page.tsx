@@ -22,7 +22,9 @@ import HoursTable from "@/components/facility/HoursTable";
 import NearbyFacilities from "@/components/facility/NearbyFacilities";
 import MapViewLazy from "@/components/map/MapViewLazy";
 import ReviewsSection from "@/components/facility/ReviewsSection";
+import ReviewInsights from "@/components/facility/ReviewInsights";
 import ShareButton from "@/components/facility/ShareButton";
+import FAQSection from "@/components/ui/FAQSection";
 import StatsBar from "@/components/ui/StatsBar";
 import Badge from "@/components/ui/Badge";
 import JsonLd from "@/components/seo/JsonLd";
@@ -227,6 +229,18 @@ export default async function FacilityDetailPage({ params }: PageProps) {
               </div>
             </section>
 
+            {/* AI Review Insights */}
+            {facility.review_summary && (
+              <ReviewInsights
+                summary={facility.review_summary}
+                pros={facility.review_pros}
+                cons={facility.review_cons}
+                bestForTags={facility.best_for_tags}
+                standoutQuote={facility.standout_quote}
+                ownerResponseRate={facility.owner_response_rate}
+              />
+            )}
+
             {/* Reviews */}
             <ReviewsSection
               reviews={reviews}
@@ -234,6 +248,41 @@ export default async function FacilityDetailPage({ params }: PageProps) {
               googlePlaceId={facility.google_place_id}
               facilityName={facility.name}
             />
+
+            {/* FAQ */}
+            <section>
+              <h2 className="mb-4 text-xl font-bold text-gray-900">
+                Frequently Asked Questions
+              </h2>
+              <FAQSection
+                items={[
+                  ...(facility.price_per_hour_cents
+                    ? [{
+                        question: `How much does it cost to play at ${facility.name}?`,
+                        answer: `Court rental at ${facility.name} starts at $${(facility.price_per_hour_cents / 100).toFixed(0)} per hour${facility.price_peak_cents ? `, with peak hours at $${(facility.price_peak_cents / 100).toFixed(0)} per hour` : ""}. ${facility.membership_available ? "Memberships are also available for regular players." : ""}`,
+                      }]
+                    : []),
+                  {
+                    question: `How many padel courts does ${facility.name} have?`,
+                    answer: `${facility.name} has ${facility.total_courts} padel ${facility.total_courts === 1 ? "court" : "courts"}${facility.indoor_court_count > 0 ? ` (${facility.indoor_court_count} indoor` : ""}${facility.outdoor_court_count > 0 ? `${facility.indoor_court_count > 0 ? ", " : " ("}${facility.outdoor_court_count} outdoor` : ""}${facility.indoor_court_count > 0 || facility.outdoor_court_count > 0 ? ")" : ""}.`,
+                  },
+                  ...(facility.review_count > 0
+                    ? [{
+                        question: `What do players say about ${facility.name}?`,
+                        answer: facility.review_summary
+                          ? facility.review_summary
+                          : `${facility.name} has ${facility.review_count} ${facility.review_count === 1 ? "review" : "reviews"} with an average rating of ${Number(facility.avg_rating).toFixed(1)} out of 5 stars.`,
+                      }]
+                    : []),
+                  ...(facility.best_for_tags && facility.best_for_tags.length > 0
+                    ? [{
+                        question: `Who is ${facility.name} best for?`,
+                        answer: `Based on player reviews, ${facility.name} is best suited for ${facility.best_for_tags.join(", ").replace(/, ([^,]*)$/, ", and $1")}.`,
+                      }]
+                    : []),
+                ]}
+              />
+            </section>
           </div>
 
           {/* Sidebar */}

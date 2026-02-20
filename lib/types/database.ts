@@ -108,6 +108,12 @@ export interface Database {
           data_source: string;
           google_cid: string | null;
           rating_distribution: Record<string, number> | null;
+          review_summary: string | null;
+          review_pros: string[] | null;
+          review_cons: string[] | null;
+          best_for_tags: string[] | null;
+          standout_quote: string | null;
+          owner_response_rate: number | null;
           meta_title: string | null;
           meta_description: string | null;
           status: string;

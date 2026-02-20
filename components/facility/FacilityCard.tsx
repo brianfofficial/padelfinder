@@ -136,6 +136,25 @@ export default function FacilityCard({
                 ))}
               </div>
             )}
+
+            {facility.best_for_tags && facility.best_for_tags.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1">
+                {facility.best_for_tags.slice(0, 3).map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-padel-50 px-2 py-0.5 text-xs font-medium text-padel-700"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {facility.standout_quote && (
+              <p className="mt-2 text-xs italic text-gray-500 line-clamp-2">
+                &ldquo;{facility.standout_quote}&rdquo;
+              </p>
+            )}
           </>
         )}
 
